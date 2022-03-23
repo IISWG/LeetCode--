@@ -1,6 +1,8 @@
 package primary_algorithms;
 
 
+import sort.ListNode;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,13 +47,7 @@ class Solution {
 //以下是链表相关的算法
 
 //  Definition for singly-linked list.
-  class ListNode {
-      int val;
-      ListNode next;
-     ListNode() {}
-      ListNode(int val) { this.val = val; }
-      ListNode(int val, ListNode next) { this.val = val; this.next = next; }
- }
+
 
 class Solution1 {
     public ListNode reverseList(ListNode head) {

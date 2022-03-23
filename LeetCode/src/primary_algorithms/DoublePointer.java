@@ -1,5 +1,9 @@
 package primary_algorithms;
 
+
+
+import sort.ListNode;
+
 import java.util.List;
 
 public class DoublePointer {

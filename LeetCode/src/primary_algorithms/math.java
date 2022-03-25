@@ -2,6 +2,7 @@ package primary_algorithms;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class math {
     public static void main(String[] args) {
@@ -139,6 +140,7 @@ class t2 extends Object implements Cloneable {
 
     public void tet() throws FileNotFoundException {
         ArrayList<Integer> objects = new ArrayList<>();
+        CopyOnWriteArrayList<Integer> objects5 = new CopyOnWriteArrayList<>();
         LinkedList<Integer> objects3 = new LinkedList<>();
         Vector<Integer> objects4 = new Vector<>();
 

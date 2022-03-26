@@ -351,5 +351,241 @@ public class offer1 {
             return arrayLists;
         }
     }
+    /*
+    从先序遍历还原二叉树
 
+     */
+    class Solution11 {
+        public TreeNode recoverFromPreorder(String traversal) {
+            LinkedList<TreeNode> treeNodes = new LinkedList<>();
+            int zhizheng = 0;
+            while (zhizheng < traversal.length()) {
+                int cength = 0;
+                while (zhizheng < traversal.length() && traversal.charAt(zhizheng) == '-') {
+                    cength++;
+                    zhizheng++;
+                }
+                int value = 0;
+                while (zhizheng < traversal.length() && Character.isDigit(traversal.charAt(zhizheng))) {
+                    value = value * 10 + traversal.charAt(zhizheng) - '0';
+                    zhizheng++;
+                }
+                TreeNode cur = new TreeNode(value);
+                if (cength == treeNodes.size()) {
+                    if (!treeNodes.isEmpty()) {
+                        TreeNode last = treeNodes.peek();
+                        last.left = cur;
+                    }
+                } else {
+                    while (cength != treeNodes.size()) {
+                        treeNodes.pop();
+                    }
+                    if (!treeNodes.isEmpty()) {
+                        TreeNode last = treeNodes.peek();
+                        last.right = cur;
+                    }
+                }
+                treeNodes.push(cur);
+            }
+            while (treeNodes.size() > 1) {
+                treeNodes.pop();
+            }
+            return treeNodes.peek();
+
+
+        }
+    }
+
+    /*
+剑指 Offer 10- I. 斐波那契数列     */
+
+    class Solution12 {
+        public int fib(int n) {
+            if (n == 0) {
+                return 0;
+            }
+            if (n == 1) {
+                return 1;
+            }
+            int[] ints = new int[n+1];
+            ints[0] = 0;
+            ints[1] = 1;
+            for (int i = 2; i <= n; i++) {
+                ints[i] = (ints[i - 1] + ints[i - 2])%1000000007;
+            }
+            return ints[n];
+        }
+    }
+    /*
+     剑指 Offer 10- II. 青蛙跳台阶问题
+     */
+    class Solution13 {
+        public int numWays(int n) {
+            if (n <= 1) {
+                return 1;
+            }
+            int qian = 1;
+            int hou = 1;
+            int cur = 1;
+            for (int i = 2; i <= n; i++) {
+                qian = hou;
+                hou = cur;
+                cur = (qian + hou) % 1000000007;
+            }
+            return cur;
+
+        }
+    }
+
+//    53. 最大子数组和
+        class Solution14 {
+            public int maxSubArray(int[] nums) {
+
+                int ans = nums[0], s = 0;
+                for(int i : nums) {
+                    s += i;
+                    if (s > ans) {
+                        ans = s;
+                    }
+                    if (s < 0) {
+                        s = 0;
+                    }
+                }
+                return ans;
+//                int pre = 0;
+//                int max = nums[0];
+//                for (int i = 0; i < nums.length; i++) {
+//                   pre =nums[i]+ Math.max(pre,0);
+//                    max = Math.max(pre, max);
+//                }
+//                return max;
+            }
+        }
+
+        /*
+        剑指 Offer 46. 把数字翻译成字符串
+         */
+        class Solution15 {
+            public int translateNum(int num) {
+                int qian = 1;
+                int hou = 1;
+                int x =0, y = num % 10;
+                int cur = 1;
+                while (num != 0) {
+                    num /= 10;
+                    x = num % 10;
+                    int sum = x * 10 + y;
+                    if (sum >= 10 && sum <= 25) {
+                        cur = qian + hou;
+                    } else {
+                        cur = hou;
+                    }
+                    y = x;
+                    qian = hou;
+                    hou = cur;
+
+                }
+                return cur;
+            }
+        }
+        /*
+        剑指 Offer 47. 礼物的最大价值
+         */
+        class Solution16 {
+            public int maxValue(int[][] grid) {
+                int rows = grid.length;
+                int cows = grid[0].length;
+                for (int i = 0; i < rows; i++) {
+                    for (int j = 0; j < cows; j++) {
+                        if (i == 0 && j == 0) {
+                            continue;
+                        }
+                        if (i == 0) {
+                            grid[i][j] = grid[i][j - 1] + grid[i][j];
+                        } else if (j == 0) {
+                            grid[i][j] = grid[i - 1][j] + grid[i][j];
+                        } else {
+                            grid[i][j] = Math.max(grid[i - 1][j], grid[i][j - 1])+grid[i][j];
+                        }
+
+                    }
+                }
+                return grid[rows - 1][cows - 1];
+            }
+        }
+
+        /*
+        剑指 Offer 49. 丑数
+         */
+
+    class Solution17 {
+        public int nthUglyNumber(int n) {
+            int a = 0, b = 0, c = 0;
+            int[] choushu = new int[n];
+            choushu[0] = 1;
+            for (int i = 1; i < n; i++) {
+                int ashu = choushu[a] * 2;
+                int bshu = choushu[b] * 3;
+                int cshu = choushu[c] * 5;
+                int min = Math.min(Math.min(ashu, bshu), cshu);
+                choushu[i] = min;
+                if (ashu == min) {
+                    a++;
+                }
+                if (bshu == min) {
+                    b++;
+                }
+                if (cshu == min) {
+                    c++;
+                }
+            }
+            return choushu[n - 1];
+        }
+    }
+
+    /*
+    剑指 Offer 62. 圆圈中最后剩下的数字
+     */
+    class Solution18 {
+        public int lastRemaining(int n, int m) {
+            int ans = 0;
+            // 最后一轮剩下2个人，所以从2开始反推
+            for (int i = 2; i <= n; i++) {
+                ans = (ans + m) % i;
+            }
+            return ans;
+
+
+        }
+    }
+
+    /*
+    剑指 Offer 63. 股票的最大利润
+     */
+
+    class Solution19 {
+        public int maxProfit(int[] prices) {
+            int max = 0;
+            int sum = 0;
+            for (int i = 0; i < prices.length - 1; i++) {
+                int num = prices[i + 1] - prices[i];
+                sum += num;
+                if (sum > 0) {
+                    max = Math.max(max, sum);
+                } else {
+                    sum = 0;
+                }
+            }
+            return max;
+
+//            int min = Integer.MAX_VALUE;
+//            int max = 0;
+//            for (int price : prices) {
+//                min = Math.min(min, price);
+//                max = Math.max(max, price - min);
+//            }
+//            return max;
+
+        }
+    }
 }

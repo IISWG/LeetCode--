@@ -588,4 +588,180 @@ public class offer1 {
 
         }
     }
+    /*
+剑指 Offer 68 - II. 二叉树的最近公共祖先     */
+    class Solution20 {
+        public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+            if (root == null) {
+                return null;
+            }
+            if (root.val == p.val) {
+                return p;
+            }
+            if (root.val == q.val) {
+                return q;
+            }
+            TreeNode left = lowestCommonAncestor(root.left, p, q);
+            TreeNode right = lowestCommonAncestor(root.right, p, q);
+            if (left == null && right == null) {
+                return null;
+            } else if (left == null) {
+                return right;
+            } else if (right == null) {
+                return left;
+            }
+            return root;
+
+        }
+    }
+    /*
+从前序与中序遍历序列构造二叉树
+     */
+    class Solution21 {
+        private Map<Integer, Integer> indexMap;
+
+        public TreeNode myBuildTree(int[] preorder, int[] inorder, int preorder_left, int preorder_right, int inorder_left, int inorder_right) {
+            if (preorder_left > preorder_right) {
+                return null;
+            }
+            TreeNode rootNode = new TreeNode(preorder[preorder_left]);
+            int rootindex = indexMap.get(rootNode.val);
+            int zuo = rootindex - inorder_left;
+            TreeNode leftNode = myBuildTree(preorder, inorder, preorder_left + 1, preorder_left + zuo, inorder_left, rootindex - 1);
+            TreeNode rightNode = myBuildTree(preorder, inorder, preorder_left + zuo + 1, preorder_right, rootindex+1, inorder_right);
+            rootNode.left = leftNode;
+            rootNode.right = rightNode;
+            return rootNode;
+        }
+
+        public TreeNode buildTree(int[] preorder, int[] inorder) {
+            int length = inorder.length;
+            indexMap = new HashMap<>();
+            for (int i = 0; i < length; i++) {
+                indexMap.put(inorder[i], i);
+            }
+            TreeNode treeNode = myBuildTree(preorder, inorder, 0, preorder.length - 1, 0, inorder.length - 1);
+            return treeNode;
+        }
+    }
+
+    /*剑指 Offer 26. 树的子结构
+
+     */
+    class Solution22 {
+        public boolean isSubStructure(TreeNode A, TreeNode B) {
+            if (B == null || A == null) {
+                return false;
+            }
+            if (A.val == B.val && (re(A.left, B.left) && re(A.right, B.right))) {
+                return true;
+            }
+            return isSubStructure(A.left, B) || isSubStructure(A.right, B);
+        }
+        public boolean re(TreeNode A, TreeNode B) {
+            if (B == null) {
+                return true;
+            }
+            if (A == null || A.val != B.val) {
+                return false;
+            }
+            boolean left = re(A.left, B.left);
+            boolean right = re(A.right, B.right);
+            return left && right;
+
+        }
+    }
+
+    /*
+剑指 Offer 64. 求1+2+…+n
+     */
+
+    class Solution23 {
+        public int sumNums(int n) {
+            boolean temp = n>0 && (n += sumNums(n-1)) >0;
+            return n;
+        }
+    }
+
+//    剑指 Offer 44. 数字序列中某一位的数字
+    class Solution24 {
+        public int findNthDigit(int n) {
+            int digit = 1;
+            long start = 1;
+            long count = 9;
+            return 0;
+        }
+    }
+    //990. 等式方程的可满足性
+    class Solution25 {
+        public boolean equationsPossible(String[] equations) {
+            int[] parents = new int[26];
+            for (int i = 0; i < parents.length; i++) {
+                parents[i] = i;
+            }
+            for (String equation : equations) {
+                if (equation.charAt(1) == '=') {
+                    union(parents, equation.charAt(0) - 'a', equation.charAt(3) - 'a');
+                }
+            }
+            for (String equation : equations) {
+                if (equation.charAt(1) == '!') {
+                    int qian = find(parents, equation.charAt(3) - 'a');
+                    int hou = find(parents, equation.charAt(0) - 'a');
+                    if (qian == hou) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public void union(int[] parent, int index1, int index2) {
+            parent[find(parent, index1)] = find(parent, index2);
+        }
+
+        public int find(int[] parent, int index) {
+            while (index != parent[index]) {
+                index = parent[index];
+            }
+            return index;
+        }
+
+    }
+
+//    剑指 Offer 03. 数组中重复的数字
+    class Solution26 {
+        public int findRepeatNumber(int[] nums) {
+            HashSet<Integer> integers = new HashSet<>();
+            for (int num : nums) {
+                if (!integers.add(num)) {
+                    return num;
+                }
+            }
+            return 0;
+
+        }
+    }
+    //剑指 Offer 48. 最长不含重复字符的子字符串
+    class Solution27 {
+        public int lengthOfLongestSubstring(String s) {
+            HashMap<Character, Integer> hashMap = new HashMap<>();
+            int max = 0;
+            int start = -1;
+            int length = s.length() - 1;
+            if (length < 0) {
+                return 0;
+            }
+            for (int i = 0; i < length; i++) {
+                Integer integer = hashMap.get(s.charAt(i));
+                if (integer != null) {
+                    start =  Math.max(start,integer);
+                }
+                hashMap.put(s.charAt(i), i);
+                max = Math.max(max, i - start);
+            }
+            return max;
+        }
+    }
+
 }

@@ -1,5 +1,7 @@
 package offer;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
+
 import javax.swing.tree.TreeNode;
 import java.util.*;
 
@@ -761,6 +763,102 @@ public class offer1 {
                 max = Math.max(max, i - start);
             }
             return max;
+        }
+    }
+    //N皇后问题
+    class Solution28 {
+        public List<List<String>> solveNQueens(int n) {
+            //创建一个N行的数组，下标i对应N*N棋盘格子第i行的皇后位置
+            int[] arr = new int[n];
+            List<List<String>> res = new ArrayList<List<String>>();
+            //三个集合，分别判断某一列，左斜线(左上到右下的斜线)，右斜线(左下到右上的斜线)
+            Set<Integer> columns = new HashSet<Integer>();
+            Set<Integer> hypotenuse1 = new HashSet<Integer>();
+            Set<Integer> hypotenuse2 = new HashSet<Integer>();
+            dfs(res, n, 0,arr, columns, hypotenuse1, hypotenuse2);
+            return res;
+        }
+        private void dfs(List<List<String>> res,int n,int x,int[] arr,
+                         Set<Integer> columns,Set<Integer> hypotenuse1,Set<Integer> hypotenuse2) {
+            if (n == x) {
+                ArrayList<String> strings = new ArrayList<>();
+                for (int i : arr) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int j = 0; j < n; j++) {
+                        if (j != i) {
+                            stringBuilder.append(".");
+                        } else {
+                            stringBuilder.append("Q");
+                        }
+                    }
+                    strings.add(stringBuilder.toString());
+                }
+                res.add(strings);
+            }
+            for (int i = 0; i < n; i++) {
+                if (columns.contains(i)) {
+                    continue;
+                }
+                if (hypotenuse1.contains(x - i)) {
+                    continue;
+                }
+                if (hypotenuse2.contains(x + i)) {
+                    continue;
+                }
+                arr[x] = i;
+                columns.add(i);
+                hypotenuse1.add(x - i);
+                hypotenuse2.add(x + i);
+                dfs(res, n, x + 1, arr, columns, hypotenuse1, hypotenuse2);
+                columns.remove(i);
+                hypotenuse1.remove(x-i);
+                hypotenuse2.remove(x + i);
+            }
+        }
+    }
+    //有效的括号
+    class Solution29 {
+        public boolean isValid(String s) {
+            LinkedList<Character> a = new LinkedList<>();
+            char[] chars = s.toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                if (chars[i] == '(') {
+                    a.add(')');
+                }else if (chars[i] == '[') {
+                    a.add(']');
+                } else if (chars[i] == '{') {
+                    a.add('}');
+                } else {
+                    if (a.isEmpty() || a.pop() != chars[i]) {
+                        return false;
+                    }
+                }
+            }
+            return a.isEmpty();
+        }
+    }
+
+    //字母异位词分组
+    class Solution30 {
+        public List<List<String>> groupAnagrams(String[] strs) {
+//            ArrayList<List<String>> lists = new ArrayList<>();
+            HashMap<String, List<String>> hashMap = new HashMap<>();
+            int length = strs.length;
+            for (int i = 0; i < length; i++) {
+                char[] chars = strs[i].toCharArray();
+                Arrays.sort(chars);
+                String s = String.valueOf(chars);
+                if (hashMap.get(s) == null) {
+                    ArrayList<String> strings = new ArrayList<>();
+                    hashMap.put(s, strings);
+                }
+                hashMap.get(s).add(strs[i]);
+            }
+//            Set<String> stringSet = hashMap.keySet();
+//            for (String s : stringSet) {
+//                lists.add(hashMap.get(s));
+//            }
+            return new ArrayList<>(hashMap.values());
         }
     }
 
